@@ -76,11 +76,23 @@ def unfollow_user(username: str) -> bool:
     return response.status_code == 204
 
 
+def follow_user(username: str) -> bool:
+    """
+    Follow a GitHub user.
+
+    Returns:
+        True if the operation was successful.
+    """
+
+    response = session.put(f"{API_URL}/user/following/{username}")
+
+    return response.status_code == 204
+
 # -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
 
-def main() -> None:
+def non_followers() -> None:
     print("Fetching GitHub data...\n")
 
     followers = get_github_users("/user/followers")
@@ -116,5 +128,38 @@ def main() -> None:
             print(f"✗ Failed to unfollow {username}")
 
 
+def follow_back()->None:
+    followers = get_github_users("/user/followers")
+    following = get_github_users("/user/following")
+
+    users_to_follow = sorted(followers - following)
+
+    print(f"Followers : {len(followers)}")
+    print(f"Following : {len(following)}")
+    print(f"Users to follow back : {len(users_to_follow)}\n")
+
+    if not users_to_follow:
+        print("You already follow everyone that follows you! 🎉")
+        return
+
+    for username in users_to_follow:
+        print(f"- {username}")
+
+    confirm = input("\nType 'YES' to follow everyone listed: ")
+
+    if confirm != "YES":
+        print("Operation cancelled.")
+        return
+
+    print()
+
+    for username in users_to_follow:
+        if follow_user(username):
+            print(f"✓ Followed {username}")
+        else:
+            print(f"✗ Failed to follow {username}")
+
+
 if __name__ == "__main__":
-    main()
+    non_followers()
+    follow_back()
