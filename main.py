@@ -26,7 +26,7 @@ session.headers.update(
 # GitHub API
 # -----------------------------------------------------------------------------
 
-def get_github_users(endpoint: str) -> set[str]:
+def get_github_users(endpoint: str):
     """
     Retrieve every GitHub user from the specified endpoint.
 
@@ -63,7 +63,7 @@ def get_github_users(endpoint: str) -> set[str]:
     return users
 
 
-def unfollow_user(username: str) -> bool:
+def unfollow_user(username: str):
     """
     Unfollow a GitHub user.
 
@@ -76,7 +76,7 @@ def unfollow_user(username: str) -> bool:
     return response.status_code == 204
 
 
-def follow_user(username: str) -> bool:
+def follow_user(username: str):
     """
     Follow a GitHub user.
 
